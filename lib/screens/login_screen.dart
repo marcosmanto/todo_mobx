@@ -1,15 +1,23 @@
 import 'package:flutter/material.dart';
+import 'package:todomobx/stores/login_store.dart';
 import 'package:todomobx/widgets/custom_icon_button.dart';
 import 'package:todomobx/widgets/custom_text_field.dart';
 
 import 'list_screen.dart';
 
 class LoginScreen extends StatefulWidget {
+  const LoginScreen({super.key});
+
   @override
-  _LoginScreenState createState() => _LoginScreenState();
+  State<LoginScreen> createState() => _LoginScreenState();
 }
 
 class _LoginScreenState extends State<LoginScreen> {
+  LoginStore loginStore = LoginStore();
+
+  final TextEditingController emailController = TextEditingController();
+  final TextEditingController passwordController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -28,20 +36,22 @@ class _LoginScreenState extends State<LoginScreen> {
                   mainAxisSize: MainAxisSize.min,
                   children: <Widget>[
                     CustomTextField(
+                      controller: emailController,
                       hint: 'E-mail',
                       prefix: Icon(Icons.account_circle),
                       textInputType: TextInputType.emailAddress,
-                      onChanged: (email) {},
+                      onChanged: loginStore.setEmail,
                       enabled: true,
                     ),
                     const SizedBox(
                       height: 16,
                     ),
                     CustomTextField(
+                      controller: passwordController,
                       hint: 'Senha',
                       prefix: Icon(Icons.lock),
                       obscure: true,
-                      onChanged: (pass) {},
+                      onChanged: loginStore.setPassword,
                       enabled: true,
                       suffix: CustomIconButton(
                         radius: 32,
@@ -56,8 +66,10 @@ class _LoginScreenState extends State<LoginScreen> {
                       height: 44,
                       child: ElevatedButton(
                         style: ElevatedButton.styleFrom(
+                          padding: EdgeInsets.symmetric(horizontal: 30),
                           foregroundColor: Colors.white,
-                          backgroundColor: Theme.of(context).primaryColor,
+                          backgroundColor:
+                              Theme.of(context).colorScheme.primary,
                           disabledForegroundColor:
                               Theme.of(context).primaryColor.withAlpha(100),
                           shape: RoundedRectangleBorder(
