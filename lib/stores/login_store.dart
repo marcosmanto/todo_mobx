@@ -19,11 +19,15 @@ abstract class _LoginStore with Store {
   String email = '';
   @observable
   String password = '';
+  @observable
+  bool obscurePassword = true;
 
   @action
   void setEmail(String value) => email = value;
   @action
   void setPassword(String value) => password = value;
+  @action
+  void toggleObscurePassword() => obscurePassword = !obscurePassword;
 
   @computed
   bool get isPasswordValid => password.length > 6;

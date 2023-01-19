@@ -1,14 +1,17 @@
 import 'package:flutter/material.dart';
 
 class CustomIconButton extends StatelessWidget {
-  CustomIconButton(
-      {super.key,
-      required this.radius,
-      required this.iconData,
-      required this.onTap});
+  CustomIconButton({
+    super.key,
+    required this.radius,
+    required this.iconData,
+    required this.onTap,
+    this.iconColor,
+  });
 
   final double radius;
   final IconData iconData;
+  final Color? iconColor;
   final VoidCallback onTap;
 
   @override
@@ -20,6 +23,7 @@ class CustomIconButton extends StatelessWidget {
         child: InkWell(
           onTap: onTap,
           child: Icon(
+            color: iconColor ?? Theme.of(context).colorScheme.primary,
             iconData,
           ),
         ),

@@ -62,6 +62,22 @@ mixin _$LoginStore on _LoginStore, Store {
     });
   }
 
+  late final _$obscurePasswordAtom =
+      Atom(name: '_LoginStore.obscurePassword', context: context);
+
+  @override
+  bool get obscurePassword {
+    _$obscurePasswordAtom.reportRead();
+    return super.obscurePassword;
+  }
+
+  @override
+  set obscurePassword(bool value) {
+    _$obscurePasswordAtom.reportWrite(value, super.obscurePassword, () {
+      super.obscurePassword = value;
+    });
+  }
+
   late final _$_LoginStoreActionController =
       ActionController(name: '_LoginStore', context: context);
 
@@ -88,10 +104,22 @@ mixin _$LoginStore on _LoginStore, Store {
   }
 
   @override
+  void toggleObscurePassword() {
+    final _$actionInfo = _$_LoginStoreActionController.startAction(
+        name: '_LoginStore.toggleObscurePassword');
+    try {
+      return super.toggleObscurePassword();
+    } finally {
+      _$_LoginStoreActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   String toString() {
     return '''
 email: ${email},
 password: ${password},
+obscurePassword: ${obscurePassword},
 isPasswordValid: ${isPasswordValid},
 isEmailValid: ${isEmailValid},
 isFormValid: ${isFormValid}
