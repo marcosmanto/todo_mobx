@@ -31,13 +31,11 @@ abstract class _LoginStore with Store {
   @action
   void toggleObscurePassword() => obscurePassword = !obscurePassword;
   @action
-  Future<void> login() async {
+  void login() {
     loading = true;
 
     // processar o login
-    await Future.delayed(Duration(seconds: 3));
-
-    loading = false;
+    Future.delayed(Duration(seconds: 3)).then((_) => loading = false);
   }
 
   @computed
@@ -48,4 +46,6 @@ abstract class _LoginStore with Store {
       .hasMatch(email);
   @computed
   bool get isFormValid => isEmailValid && isPasswordValid;
+  @computed
+  void Function() get loginPressed => (!loading && isFormValid) ? login : () {};
 }

@@ -4,8 +4,6 @@ import 'package:todomobx/stores/login_store.dart';
 import 'package:todomobx/widgets/custom_icon_button.dart';
 import 'package:todomobx/widgets/custom_text_field.dart';
 
-import 'list_screen.dart';
-
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
 
@@ -85,22 +83,13 @@ class _LoginScreenState extends State<LoginScreen> {
                           elevation: 2.25,
                           fixedSize: Size(150, 44),
                         ),
-                        onPressed: !loginStore.loading && loginStore.isFormValid
-                            ? () async {
-                                await loginStore.login();
-                                if (!mounted) return;
-                                Navigator.of(context).pushReplacement(
-                                  MaterialPageRoute(
-                                    builder: (context) => ListScreen(),
-                                  ),
-                                );
-                              }
-                            : null,
+                        onPressed: loginStore.loginPressed,
                         child: loginStore.loading
                             ? SizedBox(
                                 height: 18,
                                 width: 18,
                                 child: CircularProgressIndicator(
+                                  color: Colors.white,
                                   strokeWidth: 2.25,
                                 ))
                             : Text('Login'),
