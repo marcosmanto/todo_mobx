@@ -11,7 +11,7 @@ abstract class _LoginStore with Store {
       //print(email);
       //print(password);
       //print('Password valid: $isPasswordValid\nEmail valid: $isEmailValid');
-      print('Form valid: $isFormValid');
+      //print('Form valid: $isFormValid');
     });
   }
 
@@ -23,6 +23,8 @@ abstract class _LoginStore with Store {
   bool obscurePassword = true;
   @observable
   bool loading = false;
+  @observable
+  bool loggedIn = false;
 
   @action
   void setEmail(String value) => email = value;
@@ -35,7 +37,10 @@ abstract class _LoginStore with Store {
     loading = true;
 
     // processar o login
-    Future.delayed(Duration(seconds: 3)).then((_) => loading = false);
+    Future.delayed(Duration(seconds: 3)).then((_) {
+      loading = false;
+      loggedIn = true;
+    });
   }
 
   @computed
@@ -47,5 +52,5 @@ abstract class _LoginStore with Store {
   @computed
   bool get isFormValid => isEmailValid && isPasswordValid;
   @computed
-  void Function() get loginPressed => (!loading && isFormValid) ? login : () {};
+  get loginPressed => (!loading && isFormValid) ? login : null;
 }

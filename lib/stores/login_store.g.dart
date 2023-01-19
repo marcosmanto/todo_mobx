@@ -30,13 +30,13 @@ mixin _$LoginStore on _LoginStore, Store {
       (_$isFormValidComputed ??= Computed<bool>(() => super.isFormValid,
               name: '_LoginStore.isFormValid'))
           .value;
-  Computed<void Function()>? _$loginPressedComputed;
+  Computed<dynamic>? _$loginPressedComputed;
 
   @override
-  void Function() get loginPressed => (_$loginPressedComputed ??=
-          Computed<void Function()>(() => super.loginPressed,
+  dynamic get loginPressed =>
+      (_$loginPressedComputed ??= Computed<dynamic>(() => super.loginPressed,
               name: '_LoginStore.loginPressed'))
-      .value;
+          .value;
 
   late final _$emailAtom = Atom(name: '_LoginStore.email', context: context);
 
@@ -101,6 +101,22 @@ mixin _$LoginStore on _LoginStore, Store {
     });
   }
 
+  late final _$loggedInAtom =
+      Atom(name: '_LoginStore.loggedIn', context: context);
+
+  @override
+  bool get loggedIn {
+    _$loggedInAtom.reportRead();
+    return super.loggedIn;
+  }
+
+  @override
+  set loggedIn(bool value) {
+    _$loggedInAtom.reportWrite(value, super.loggedIn, () {
+      super.loggedIn = value;
+    });
+  }
+
   late final _$_LoginStoreActionController =
       ActionController(name: '_LoginStore', context: context);
 
@@ -155,6 +171,7 @@ email: ${email},
 password: ${password},
 obscurePassword: ${obscurePassword},
 loading: ${loading},
+loggedIn: ${loggedIn},
 isPasswordValid: ${isPasswordValid},
 isEmailValid: ${isEmailValid},
 isFormValid: ${isFormValid},
