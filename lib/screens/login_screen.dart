@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:todomobx/stores/login_store.dart';
 import 'package:todomobx/widgets/custom_icon_button.dart';
 import 'package:todomobx/widgets/custom_text_field.dart';
@@ -64,24 +65,17 @@ class _LoginScreenState extends State<LoginScreen> {
                     ),
                     SizedBox(
                       height: 44,
-                      child: ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                          padding: EdgeInsets.symmetric(horizontal: 30),
-                          foregroundColor: Colors.white,
-                          backgroundColor:
-                              Theme.of(context).colorScheme.primary,
-                          disabledForegroundColor:
-                              Theme.of(context).primaryColor.withAlpha(100),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(32),
-                          ),
+                      child: Observer(
+                        builder: (_) => ElevatedButton(
+                          onPressed: loginStore.isFormValid
+                              ? () {
+                                  Navigator.of(context).pushReplacement(
+                                      MaterialPageRoute(
+                                          builder: (context) => ListScreen()));
+                                }
+                              : null,
+                          child: Text('Login'),
                         ),
-                        child: Text('Login'),
-                        onPressed: () {
-                          Navigator.of(context).pushReplacement(
-                              MaterialPageRoute(
-                                  builder: (context) => ListScreen()));
-                        },
                       ),
                     )
                   ],

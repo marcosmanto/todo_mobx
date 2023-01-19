@@ -8,8 +8,10 @@ class LoginStore = _LoginStore with _$LoginStore;
 abstract class _LoginStore with Store {
   _LoginStore() {
     autorun((_) {
-      print(email);
-      print(password);
+      //print(email);
+      //print(password);
+      //print('Password valid: $isPasswordValid\nEmail valid: $isEmailValid');
+      print('Form valid: $isFormValid');
     });
   }
 
@@ -22,4 +24,13 @@ abstract class _LoginStore with Store {
   void setEmail(String value) => email = value;
   @action
   void setPassword(String value) => password = value;
+
+  @computed
+  bool get isPasswordValid => password.length > 6;
+  @computed
+  bool get isEmailValid => RegExp(
+          r"^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,253}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,253}[a-zA-Z0-9])?)*$")
+      .hasMatch(email);
+  @computed
+  bool get isFormValid => isEmailValid && isPasswordValid;
 }

@@ -15,6 +15,19 @@ class MyApp extends StatelessWidget {
         colorScheme: ThemeData().colorScheme.copyWith(
               primary: Colors.deepPurpleAccent,
             ),
+        elevatedButtonTheme: ElevatedButtonThemeData(
+          style: ElevatedButton.styleFrom(
+            padding: EdgeInsets.symmetric(horizontal: 30),
+            foregroundColor: Colors.white,
+            backgroundColor: Colors.deepPurpleAccent,
+            disabledForegroundColor: Color(0xFF818480)
+                .withAlpha(110), //Colors.deepPurpleAccent.withAlpha(100),
+            disabledBackgroundColor: Color(0xFFecefec),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(32),
+            ),
+          ),
+        ),
         textSelectionTheme:
             TextSelectionThemeData(cursorColor: Colors.deepPurpleAccent),
         scaffoldBackgroundColor: Colors.deepPurpleAccent,
