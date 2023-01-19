@@ -15,6 +15,7 @@ class LoginScreen extends StatefulWidget {
 
 class _LoginScreenState extends State<LoginScreen> {
   LoginStore loginStore = LoginStore();
+  late ReactionDisposer disposer;
 
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
@@ -23,9 +24,8 @@ class _LoginScreenState extends State<LoginScreen> {
   void didChangeDependencies() {
     super.didChangeDependencies();
 
-    autorun((_) {
-      print(loginStore.obscurePassword);
-      if (loginStore.loggedIn) {
+    disposer = reaction((_) => loginStore.loggedIn, (loggedIn) {
+      if (loggedIn) {
         Navigator.of(context).pushReplacement(
           MaterialPageRoute(
             builder: (_) => ListScreen(),
@@ -33,6 +33,12 @@ class _LoginScreenState extends State<LoginScreen> {
         );
       }
     });
+  }
+
+  @override
+  void dispose() {
+    disposer();
+    super.dispose();
   }
 
   @override
