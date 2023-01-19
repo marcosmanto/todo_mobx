@@ -39,6 +39,8 @@ class CustomTextField extends StatelessWidget {
         enabled: enabled,
         decoration: InputDecoration(
           hintText: hint,
+          hintStyle: TextStyle(color: Colors.grey.withAlpha(200)),
+          alignLabelWithHint: true,
           border: InputBorder.none,
           prefixIcon: prefix,
           suffixIcon: suffix,
