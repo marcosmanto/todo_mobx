@@ -33,22 +33,6 @@ mixin _$ListStore on _ListStore, Store {
     });
   }
 
-  late final _$todoListAtom =
-      Atom(name: '_ListStore.todoList', context: context);
-
-  @override
-  List<String> get todoList {
-    _$todoListAtom.reportRead();
-    return super.todoList;
-  }
-
-  @override
-  set todoList(List<String> value) {
-    _$todoListAtom.reportWrite(value, super.todoList, () {
-      super.todoList = value;
-    });
-  }
-
   late final _$_ListStoreActionController =
       ActionController(name: '_ListStore', context: context);
 
@@ -78,7 +62,6 @@ mixin _$ListStore on _ListStore, Store {
   String toString() {
     return '''
 newTodoTitle: ${newTodoTitle},
-todoList: ${todoList},
 isFormValid: ${isFormValid}
     ''';
   }
