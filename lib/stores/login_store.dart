@@ -21,6 +21,8 @@ abstract class _LoginStore with Store {
   String password = '';
   @observable
   bool obscurePassword = true;
+  @observable
+  bool loading = false;
 
   @action
   void setEmail(String value) => email = value;
@@ -28,6 +30,15 @@ abstract class _LoginStore with Store {
   void setPassword(String value) => password = value;
   @action
   void toggleObscurePassword() => obscurePassword = !obscurePassword;
+  @action
+  Future<void> login() async {
+    loading = true;
+
+    // processar o login
+    await Future.delayed(Duration(seconds: 3));
+
+    loading = false;
+  }
 
   @computed
   bool get isPasswordValid => password.length > 6;

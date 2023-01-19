@@ -36,54 +36,74 @@ class _LoginScreenState extends State<LoginScreen> {
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: <Widget>[
-                    CustomTextField(
-                      controller: emailController,
-                      hint: 'E-mail',
-                      prefix: Icon(Icons.account_circle),
-                      textInputType: TextInputType.emailAddress,
-                      onChanged: loginStore.setEmail,
-                      enabled: true,
-                    ),
-                    const SizedBox(
-                      height: 16,
-                    ),
                     Observer(
-                      builder: (_) => CustomTextField(
-                        controller: passwordController,
-                        hint: 'Senha',
-                        prefix: Icon(Icons.lock),
-                        obscure: loginStore.obscurePassword,
-                        onChanged: loginStore.setPassword,
-                        enabled: true,
-                        suffix: CustomIconButton(
-                          iconColor: loginStore.obscurePassword
-                              ? Color(0xFF818480)
-                              : null,
-                          radius: 32,
-                          iconData: Icons.visibility,
-                          /*loginStore.obscurePassword
-                              ? Icons.visibility
-                              : Icons.visibility_off,*/
-                          onTap: loginStore.toggleObscurePassword,
+                      builder: (_) => Opacity(
+                        opacity: loginStore.loading ? .5 : 1,
+                        child: CustomTextField(
+                          controller: emailController,
+                          hint: 'E-mail',
+                          prefix: Icon(Icons.account_circle),
+                          textInputType: TextInputType.emailAddress,
+                          onChanged: loginStore.setEmail,
+                          enabled: !loginStore.loading,
                         ),
                       ),
                     ),
                     const SizedBox(
                       height: 16,
                     ),
-                    SizedBox(
-                      height: 44,
-                      child: Observer(
-                        builder: (_) => ElevatedButton(
-                          onPressed: loginStore.isFormValid
-                              ? () {
-                                  Navigator.of(context).pushReplacement(
-                                      MaterialPageRoute(
-                                          builder: (context) => ListScreen()));
-                                }
-                              : null,
-                          child: Text('Login'),
+                    Observer(
+                      builder: (_) => Opacity(
+                        opacity: loginStore.loading ? .5 : 1,
+                        child: CustomTextField(
+                          controller: passwordController,
+                          hint: 'Senha',
+                          prefix: Icon(Icons.lock),
+                          obscure: loginStore.obscurePassword,
+                          onChanged: loginStore.setPassword,
+                          enabled: !loginStore.loading,
+                          suffix: CustomIconButton(
+                            iconColor: loginStore.obscurePassword
+                                ? Color(0xFF818480)
+                                : null,
+                            radius: 32,
+                            iconData: Icons.visibility,
+                            /*loginStore.obscurePassword
+                                ? Icons.visibility
+                                : Icons.visibility_off,*/
+                            onTap: loginStore.toggleObscurePassword,
+                          ),
                         ),
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 16,
+                    ),
+                    Observer(
+                      builder: (_) => ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          elevation: 2.25,
+                          fixedSize: Size(150, 44),
+                        ),
+                        onPressed: !loginStore.loading && loginStore.isFormValid
+                            ? () async {
+                                await loginStore.login();
+                                if (!mounted) return;
+                                Navigator.of(context).pushReplacement(
+                                  MaterialPageRoute(
+                                    builder: (context) => ListScreen(),
+                                  ),
+                                );
+                              }
+                            : null,
+                        child: loginStore.loading
+                            ? SizedBox(
+                                height: 18,
+                                width: 18,
+                                child: CircularProgressIndicator(
+                                  strokeWidth: 2.25,
+                                ))
+                            : Text('Login'),
                       ),
                     )
                   ],
