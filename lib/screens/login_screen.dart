@@ -24,6 +24,7 @@ class _LoginScreenState extends State<LoginScreen> {
     super.didChangeDependencies();
 
     autorun((_) {
+      print(loginStore.obscurePassword);
       if (loginStore.loggedIn) {
         Navigator.of(context).pushReplacement(
           MaterialPageRoute(
