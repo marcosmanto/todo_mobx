@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:mobx/mobx.dart';
+import 'package:provider/provider.dart';
 import 'package:todomobx/screens/list_screen.dart';
 import 'package:todomobx/stores/login_store.dart';
 import 'package:todomobx/widgets/custom_icon_button.dart';
@@ -14,7 +15,7 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
-  LoginStore loginStore = LoginStore();
+  late LoginStore loginStore;
   late ReactionDisposer disposer;
 
   final TextEditingController emailController = TextEditingController();
@@ -23,6 +24,8 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
+
+    loginStore = Provider.of<LoginStore>(context);
 
     disposer = reaction((_) => loginStore.loggedIn, (loggedIn) {
       if (loggedIn) {

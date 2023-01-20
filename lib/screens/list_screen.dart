@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:mobx/mobx.dart';
+import 'package:provider/provider.dart';
 import 'package:todomobx/stores/list_store.dart';
+import 'package:todomobx/stores/login_store.dart';
 import 'package:todomobx/widgets/custom_icon_button.dart';
 import 'package:todomobx/widgets/custom_text_field.dart';
 
+import '../stores/todo_store.dart';
 import 'login_screen.dart';
 
 class ListScreen extends StatefulWidget {
@@ -15,8 +19,17 @@ class ListScreen extends StatefulWidget {
 
 class _ListScreenState extends State<ListScreen> {
   final TextEditingController taskController = TextEditingController();
+  final ScrollController _scrollController = ScrollController();
 
   ListStore listStore = ListStore();
+
+  void _scrollDown() {
+    _scrollController.animateTo(
+      _scrollController.position.maxScrollExtent,
+      duration: const Duration(milliseconds: 1000),
+      curve: Curves.easeOutQuart,
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -44,6 +57,8 @@ class _ListScreenState extends State<ListScreen> {
                       icon: Icon(Icons.exit_to_app),
                       color: Colors.white,
                       onPressed: () {
+                        Provider.of<LoginStore>(context, listen: false)
+                            .logout();
                         Navigator.of(context).pushReplacement(MaterialPageRoute(
                             builder: (context) => LoginScreen()));
                       },
@@ -66,11 +81,18 @@ class _ListScreenState extends State<ListScreen> {
                             controller: taskController,
                             hint: 'Adicione uma tarefa',
                             onChanged: listStore.setNewTodoTitle,
+                            onSubmit: () {
+                              listStore.addTodo();
+                              taskController.clear();
+                            },
                             suffix: listStore.isFormValid
                                 ? CustomIconButton(
                                     radius: 32,
                                     iconData: Icons.add,
-                                    onTap: listStore.addTodo,
+                                    onTap: () {
+                                      listStore.addTodo();
+                                      taskController.clear();
+                                    },
                                   )
                                 : CustomIconButton(
                                     iconColor: Colors.transparent,
@@ -88,11 +110,23 @@ class _ListScreenState extends State<ListScreen> {
                             builder: (_) => ListView.separated(
                               itemCount: listStore.todoList.length,
                               itemBuilder: (_, index) {
-                                return ListTile(
-                                  title: Text(
-                                    listStore.todoList[index],
+                                final TodoStore todo =
+                                    listStore.todoList[index];
+                                return Observer(
+                                  builder: (_) => ListTile(
+                                    title: Text(
+                                      todo.title,
+                                      style: TextStyle(
+                                        decoration: todo.done
+                                            ? TextDecoration.lineThrough
+                                            : null,
+                                        color: todo.done
+                                            ? Colors.grey
+                                            : Colors.black,
+                                      ),
+                                    ),
+                                    onTap: todo.toggleDone,
                                   ),
-                                  onTap: () {},
                                 );
                               },
                               separatorBuilder: (_, __) {

@@ -9,8 +9,10 @@ class CustomTextField extends StatelessWidget {
       this.obscure = false,
       this.textInputType = TextInputType.text,
       required this.onChanged,
+      this.onSubmit,
       this.enabled = true,
-      required this.controller});
+      required this.controller,
+      this.defaultValue});
 
   final TextEditingController controller;
   final String hint;
@@ -19,7 +21,9 @@ class CustomTextField extends StatelessWidget {
   final bool obscure;
   final TextInputType textInputType;
   final Function(String) onChanged;
+  final Function()? onSubmit;
   final bool enabled;
+  final String? defaultValue;
 
   @override
   Widget build(BuildContext context) {
@@ -36,6 +40,7 @@ class CustomTextField extends StatelessWidget {
         obscureText: obscure,
         keyboardType: textInputType,
         onChanged: onChanged,
+        onEditingComplete: onSubmit,
         enabled: enabled,
         decoration: InputDecoration(
           hintText: hint,
